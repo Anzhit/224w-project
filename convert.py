@@ -9,38 +9,50 @@ lines = inFile.readlines()
 
 mapping = dict()
 num = 0
-def f(x):
-    global num
-    if x in mapping.keys():
-        return mapping[x]
-    num+=1
-    mapping[x]=str(num)
-    return str(num)
+s = set()
+def f(x, first=False):
+	global s
+	y = str(abs(hash(x)) % (10 ** 10))
+	if first:
+		s |= set([y])
+	return y
+    # global num
+    # if x in mapping.keys():
+    #     return mapping[x]
+    # num+=1
+    # mapping[x]=str(num)
+    # return str(num)
 
 outFile = open(edgesPath, 'w')
 outFile2 = open(attribsPath, 'w')
 
+outString = ""
+outString2 = ""
+
 it = 0.0
 for line in lines:
     it += 1
-    print it/len(lines)
+    if it%100==0:
+    	pass
+    	# print it/len(lines)
     line = line[:-2]
     fields = line.split('\t')
     related = fields[9:]
-    vidNum = f(fields[0])
+    vidNum = f(fields[0], True)
     
-    toPrint = vidNum + "\t"
-    for field in fields[1:9]:
-        toPrint += field
+    toPrint = vidNum
+    for field in fields[:9]:
         toPrint += "\t"
-    toPrint=toPrint[:-1]
-    outFile2.write(toPrint+"\n")
-    
+        toPrint += field
+
+    outString2+=toPrint+"\n"
     for relatedVid in fields[9:]:
         relatedNum = f(relatedVid)
-        outFile.write(vidNum + "\t" + relatedNum + "\n")  
-
+        outString += vidNum + "\t" + relatedNum + "\n"
+outFile.write(outString)
 outFile.flush()
+outFile2.write(outString2)
 outFile2.flush()
 outFile.close()
 outFile2.close()
+print len(s)==len(lines)
