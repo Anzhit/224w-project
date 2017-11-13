@@ -1,5 +1,5 @@
 import sys
-
+import hashlib
 inputPath = sys.argv[1]
 edgesPath = sys.argv[2]
 attribsPath = sys.argv[3]
@@ -12,7 +12,7 @@ num = 0
 s = set()
 def f(x, first=False):
 	global s
-	y = str(abs(hash(x)) % (10 ** 10))
+	y = str(abs(int(hashlib.sha256(x).hexdigest(),16)) % (10 ** 9))
 	if first:
 		s |= set([y])
 	return y
