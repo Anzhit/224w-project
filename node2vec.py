@@ -1,8 +1,9 @@
 import numpy as np
 import snap
+from scipy.spatial.distance import cosine
 Rnd = snap.TRnd(42)
 Rnd.Randomize()
-G=snap.LoadEdgeList(snap.PNGraph, "edges.txt", 0, 1)
+G=snap.LoadEdgeList(snap.PNGraph, "sccedges.txt", 0, 1)
 f = open("vec.emd","r")
 x=f.readline()
 dim=int(x.split()[1])
@@ -25,7 +26,7 @@ den=0
 for _ in range(10000):
 	a=G.GetRndNId(Rnd)
 	b=G.GetRndNId(Rnd)
-	if(not G.IsEdge(a,b)):
+	if(not (G.IsEdge(a,b) and G.IsEdge(b,a))):
 		cnt+=np.linalg.norm(dic[a]-dic[b])
 		den+=1
 print cnt/den
