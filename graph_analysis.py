@@ -1,6 +1,7 @@
 import snap
+import matplotlib
 import matplotlib.pyplot as plt
-
+import numpy as np
 # complete graph
 graph = snap.LoadEdgeList(snap.PNGraph, 'newedges.txt', 0, 1)
 graph_n, graph_e = graph.GetNodes(), graph.GetEdges()
@@ -84,9 +85,10 @@ def category_analysis():
       else:
         category_nodes[category] = set(node)
 
-  all_nodes = 0
-  all_edges = 0
+  x = []
+  y = []
   for category in category_nodes:
+    print category
     nodes = category_nodes[category]
     category_graph = snap.TNGraph.New()
     for node in nodes:
@@ -97,12 +99,19 @@ def category_analysis():
       src, dst = edge.GetSrcNId(), edge.GetDstNId()
       if str(src) in nodes and str(dst) in nodes:
         category_graph.AddEdge(src, dst)
-
-    print category, len(nodes) 
-    print category_graph.GetNodes(), category_graph.GetEdges()
-    print snap.GetClustCf(category_graph, -1) 
-    print
-    all_nodes += category_graph.GetNodes()
-    all_edges += category_graph.GetEdges()
-  print all_nodes, all_edges
+    if category_graph.GetNodes() > 0:
+      x.append(category)
+      y.append(snap.GetClustCf(category_graph, -1))
+    # print category, len(nodes) 
+    # print category_graph.GetNodes(), category_graph.GetEdges()
+    # print snap.GetClustCf(category_graph, -1) 
+    # print
+  
+  xticks = np.arange(len(x))
+  matplotlib.rcParams.update({'font.size': 12})
+  plt.barh(xticks, y, align='center')
+  plt.yticks(xticks, x)
+  plt.xlabel('Clusetering Coefficient')
+  plt.ylabel('Category')
+  plt.show()
 category_analysis()
