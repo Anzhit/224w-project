@@ -22,6 +22,7 @@ def degree_analysis():
   cnt_scc = [i.GetVal2()/float(scc_n) for i in deg_to_count]
 
   # # plt.loglog(deg_graph, cnt_graph, label = 'entire graph')
+  matplotlib.rcParams.update({'font.size': 13})
   plt.loglog(deg_scc, cnt_scc, label = 'SCC')
   plt.xlabel('in-degree')
   plt.ylabel('proportion of nodes')
@@ -58,7 +59,6 @@ def degree_analysis():
   print "11-15", cdf_graph[15] - cdf_graph[10], cdf_scc[15] - cdf_scc[10]
   print "16-20", cdf_graph[20] - cdf_graph[15], cdf_scc[20] - cdf_scc[15]
 
-# degree_analysis()
 
 def clustering_coefficient():
   print "Entire graph", snap.GetClustCf(graph, -1)
@@ -67,7 +67,6 @@ def clustering_coefficient():
   snap.PlotClustCf(graph, "entire_graph", "Entire graph - clustering coefficient")
   snap.PlotClustCf(scc, "scc", "SCC - clustering coefficient")
 
-# clustering_coefficient()
 
 def category_analysis():
   inFile = open("newattribs.txt", 'r')
@@ -85,8 +84,8 @@ def category_analysis():
       else:
         category_nodes[category] = set(node)
 
-  x = []
-  y = []
+  x = ['overall']
+  y = [snap.GetClustCf(scc, -1)]
   for category in category_nodes:
     print category
     nodes = category_nodes[category]
@@ -108,10 +107,14 @@ def category_analysis():
     # print
   
   xticks = np.arange(len(x))
-  matplotlib.rcParams.update({'font.size': 12})
-  plt.barh(xticks, y, align='center')
+  matplotlib.rcParams.update({'font.size': 13})
+  bars = plt.barh(xticks, y, align='center')
+  bars[0].set_color('r')
   plt.yticks(xticks, x)
   plt.xlabel('Clusetering Coefficient')
   plt.ylabel('Category')
   plt.show()
+
+# degree_analysis()
+# clustering_coefficient()
 category_analysis()
