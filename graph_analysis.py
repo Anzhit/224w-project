@@ -90,7 +90,8 @@ def category_analysis():
     nodes = category_nodes[category]
     category_graph = snap.TNGraph.New()
     for node in nodes:
-      category_graph.AddNode(int(node))
+      if scc.IsNode(int(node)):
+        category_graph.AddNode(int(node))
 
     for edge in scc.Edges():
       src, dst = edge.GetSrcNId(), edge.GetDstNId()
