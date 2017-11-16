@@ -1,0 +1,64 @@
+-- format
+-- category_name number_of_nodes_expected_from_newattribs.txt
+-- actual_nodes_in_graph number_of_edges
+-- clustering_coefficient
+
+People & Blogs 25386
+25386 37240
+0.161362287633
+
+Comedy 29484
+29484 89601
+0.268676175719
+
+Entertainment 76583
+76583 254896
+0.259319623558
+
+Travel & Events 4560
+4560 4491
+0.142922126371
+
+Science & Technology 4606
+4606 11918
+0.220315996693
+
+Pets & Animals 6285
+6285 25270
+0.269513399282
+
+News & Politics 19078
+19078 77969
+0.207337204242
+
+Education 2325
+2325 1094
+0.0889708141321
+
+ UNA  3323
+3323 0
+0.0
+
+Music 75044
+75044 398400
+0.360002644039
+
+Autos & Vehicles 8452
+8452 32275
+0.292303496728
+
+Nonprofits & Activism 1050
+1050 850
+0.120427665083
+
+Sports 20363
+20363 80592
+0.276997429157
+
+Howto & Style 10672
+10672 30549
+0.252071974027
+
+Film & Animation 22166
+22166 58729
+0.239678005702
