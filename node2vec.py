@@ -15,22 +15,22 @@ dic={}
 for _ in range(numNodes):
 	t=f.readline().split()
 	dic[int(t[0])]=np.array(map(float,t[1:]))
-# cnt=0.0
-# den=0
-# for e in G.Edges():
-# 	cnt+=cosine(dic[e.GetSrcNId()],dic[e.GetDstNId()])
-# 	den+=1
+cnt=0.0
+den=0
+for e in G.Edges():
+	cnt+=cosine(dic[e.GetSrcNId()],dic[e.GetDstNId()])
+	den+=1
 
-# print cnt/den
-# cnt=0.0
-# den=0
-# for _ in range(10000):
-# 	a=G.GetRndNId(Rnd)
-# 	b=G.GetRndNId(Rnd)
-# 	if(not (G.IsEdge(a,b) and G.IsEdge(b,a))):
-# 		cnt+=cosine(dic[a],dic[b])
-# 		den+=1
-# print cnt/den
+print cnt/den
+cnt=0.0
+den=0
+for _ in range(10000):
+	a=G.GetRndNId(Rnd)
+	b=G.GetRndNId(Rnd)
+	if(not (G.IsEdge(a,b) and G.IsEdge(b,a))):
+		cnt+=cosine(dic[a],dic[b])
+		den+=1
+print cnt/den
 
 deg2dist ={}
 
@@ -54,10 +54,20 @@ Ynn=[]
 for d in deg2dist:
 	X+=[d]
 	Yn+=[(deg2dist[d][2]/deg2dist[d][3])/(deg2dist[d][0]/deg2dist[d][1])]
-
-plt.plot(X,Yn,'r')
-plt.show()
-
+for i in range(len(X)):
+	print (X[i],Yn[i]),
+X=[0.0]*6
+Y=[0]*6
+for _ in range(10000):
+	n=G.GetNI(G.GetRndNId(Rnd))
+	for d in [1,2,3,4,5]:
+		NodeVec = snap.TIntV()
+		snap.GetNodesAtHop(G, n.GetId(), d, NodeVec, True)
+		for item in np.random.choice(list(NodeVec),min(len(list(NodeVec)),50),replace=False):
+			X[d]+=cosine(dic[item],dic[n.GetId()])
+			Y[d]+=1
+for d in [1,2,3,4,5]:
+	print d,X[d]/Y[d]
 
 
 
