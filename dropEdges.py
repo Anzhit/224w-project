@@ -1,8 +1,9 @@
 import numpy as np
 import snap
 from scipy.spatial.distance import cosine
+import time
 
-Rnd = snap.TRnd(42)
+Rnd = snap.TRnd(int(time.time()))
 Rnd.Randomize()
 G=snap.LoadEdgeList(snap.PNGraph, "sccedges.txt", 0, 1)
 
@@ -21,14 +22,14 @@ for E in G.Edges():
 	edges+=[(E.GetSrcNId(), E.GetDstNId())]
 edges=np.random.permutation(edges)
 
-X=np.zeros((100000,63))
+X=np.zeros((400000,63))
 cnt=0
-for i in range(25000):
+for i in range(100000):
 	X[cnt]=np.append(np.append(dic[edges[i][0]]-dic[edges[i][1]],cosine(dic[edges[i][0]],dic[edges[i][1]])),[1,0])
 	X[cnt+1]=np.append(np.append(dic[edges[i][1]]-dic[edges[i][0]],cosine(dic[edges[i][0]],dic[edges[i][1]])),[1,0])
 	cnt+=2
 
-for i in range(25000):
+for i in range(100000):
 	u=G.GetRndNId()
 	v=G.GetRndNId()
 	if(not G.IsEdge(u,v)):
@@ -36,7 +37,7 @@ for i in range(25000):
 		X[cnt+1]=np.append(np.append(dic[v]-dic[u],cosine(dic[u],dic[v])),[0,1])
 		cnt+=2
 	i-=1
-np.save('neuralData.txt',X)
+np.save('data_test',X)
 # cnt=0.0
 # den=0
 # cnt2=0.0
