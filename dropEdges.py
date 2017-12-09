@@ -29,14 +29,14 @@ for i in range(100000):
 	X[cnt+1]=np.append(np.append(dic[edges[i][1]]-dic[edges[i][0]],cosine(dic[edges[i][0]],dic[edges[i][1]])),[1,0])
 	cnt+=2
 
-for i in range(100000):
+while cnt < 400000:
 	u=G.GetRndNId()
 	v=G.GetRndNId()
 	if(not G.IsEdge(u,v)):
 		X[cnt]=np.append(np.append(dic[u]-dic[v],cosine(dic[u],dic[v])),[0,1])
 		X[cnt+1]=np.append(np.append(dic[v]-dic[u],cosine(dic[u],dic[v])),[0,1])
 		cnt+=2
-	i-=1
+
 np.save('data_test',X)
 # cnt=0.0
 # den=0
