@@ -3,6 +3,7 @@ import time
 from sklearn.neighbors import LSHForest
 import snap
 import math
+import pickle
 
 f = open("vec.emd","r")
 x=f.readline()
@@ -38,10 +39,11 @@ count_deg = {}
 overlap_deg = {}
 count = 0
 
-chosen_indices = np.random.choice(len(node_list), len(node_list)/10, replace=False)
+chosen_indices = np.random.choice(len(node_list), len(node_list)/100, replace=False)
 print len(chosen_indices)
 
 print time.time()
+tuple_list = []
 while count <= len(chosen_indices):
   query_input = []
   for i in range(count, min(count+1000, len(chosen_indices))):
@@ -56,11 +58,25 @@ while count <= len(chosen_indices):
     node = node_list[chosen_indices[count+i]]
     ni = graph.GetNI(node)
     deg = ni.GetOutDeg()
-    graph_neighbours = set()  
+    graph_neighbours = []  
     for neighbours in ni.GetOutEdges():
-      graph_neighbours.add(neighbours)
+      graph_neighbours.append(neighbours)
     
-    lsh_neighbours = set(lsh_neighbours[:int(math.ceil(1.5*deg))])
+    graph_neighbours_vec = []
+    for neighbour in graph_neighbours:
+      graph_neighbours_vec.append(node2vec[neighbour])
+    
+    lsh_neighbours_vec = []
+    lsh_neighbours = lsh_neighbours[:int(math.ceil(1.5*deg))]
+    for neighbour in lsh_neighbours:
+      lsh_neighbours_vec.append(node2vec[neighbour])
+    
+    tup = node2vec[node], graph_neighbours, graph_neighbours_vec, lsh_neighbours, lsh_neighbours_vec
+    tuple_list.append(tup)
+
+    lsh_neighbours = set(lsh_neighbours)
+    graph_neighbours = set(graph_neighbours)
+
     overlap = lsh_neighbours & graph_neighbours
     if deg not in count_deg:
       count_deg[deg] = 1
@@ -72,6 +88,8 @@ while count <= len(chosen_indices):
   count += 1000
   if count % 10000 == 0:
     print count, time.time()
+
+pickle.dump(tuple_list, open('neighbour_data.pkl', 'wb'))
 
 sum_deg = 0
 for deg in count_deg:
